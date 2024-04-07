@@ -255,6 +255,8 @@ const editTask = (e) => {
   submitButton.innerHTML = "Save Changes";
 };
 
+
+
 //save edit
 const saveEdit = (e) => {
   if (!e) e = window.event;
@@ -263,7 +265,6 @@ const saveEdit = (e) => {
   const parentNode = e.target.parentNode.parentNode;
   // console.log(parentNode.childNodes)
 
-  
   const taskTitle = parentNode.childNodes[3].childNodes[3];
   const taskDescription = parentNode.childNodes[3].childNodes[5];
   const taskType = parentNode.childNodes[3].childNodes[7].childNodes[1];
@@ -272,27 +273,33 @@ const saveEdit = (e) => {
   const updateData = {
     taskTitle: taskTitle.innerHTML,
     taskDescription: taskDescription.innerHTML,
-    taskType: taskType.innerHTML
+    taskType: taskType.innerHTML,
   };
   let stateCopy = state.taskList;
 
-  stateCopy = stateCopy.map((task) => task.id === targetId ? {
-    id: task.id,
-    title: updateData.taskTitle,
-    description: updateData.taskDescription,
-    type: updateData.taskType,
-    url: task.url,
-  }
-  : task
+  stateCopy = stateCopy.map((task) =>
+    task.id === targetId
+      ? {
+          id: task.id,
+          title: updateData.taskTitle,
+          description: updateData.taskDescription,
+          type: updateData.taskType,
+          url: task.url,
+        }
+      : task
   );
   state.taskList = stateCopy;
+
+  //Update Local Storage and TaskList
   updateLocalStorage();
 
+
+ // Reset UI to its original state
   taskTitle.setAttribute("contenteditable", "false");
   taskDescription.setAttribute("contenteditable", "false");
   taskType.setAttribute("contenteditable", "false");
 
-  submitButton.setAttribute("onclick", "openTask.apply(this, arguents)");
+  submitButton.setAttribute("onclick", "openTask.apply(this, arguments)");
   submitButton.setAttribute("data-bs-toggle", "modal");
   submitButton.setAttribute("data-bs-target", "#showTask");
   submitButton.innerHTML = "Open Task";
@@ -303,12 +310,14 @@ const searchTask = (e) => {
   if (!e) e = window.event;
 
   while(taskContents.firstChild) {
-    taskContents.removeChild(taskContents.firstChild)
+    taskContents.removeChild(taskContents.firstChild);
   }
-  const resultData = state.taskList.filter(({title}) => {
-    title.includes(e.target.value)
-  });
+  const resultData = state.taskList.filter(({title}) => 
+    title.toLowerCase().includes(e.target.value.toLowerCase())
+  );
 
   // console.log(resultData);
-  
+  resultData.map((cardData) => 
+    taskContents.insertAdjacentHTML("beforeend", htmlTaskContent(cardData))
+  );
 }

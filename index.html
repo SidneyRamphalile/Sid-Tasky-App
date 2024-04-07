@@ -155,7 +155,14 @@
     <div class="row justify-content-center">
       <div class="col-md-6"> <!--- 50% screen width-->
         <div class="input-group flex-nowrap shadow-lg rounded">
-          <input type="search" class="form-control" placeholder="Search Your Task Here..." aria-label="Search Task" aria-describedby="addon-wrapping">
+          <input 
+            type="search" 
+            class="form-control" 
+            placeholder="Search Your Task Here..." 
+            aria-label="Search Task" 
+            aria-describedby="addon-wrapping"
+            oninput="searchTask.apply(this, arguments)"
+            />
           <span class="input-group-text" id="addon-wrapping">
             <i class="fas fa-search"></i>
           </span>
